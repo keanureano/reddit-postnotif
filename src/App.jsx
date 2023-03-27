@@ -2,22 +2,30 @@ import axios from "axios";
 import moment from "moment";
 import React, { useState, useEffect } from "react";
 function App() {
+  const [query, setQuery] = useState({
+    subreddit: "forhire",
+    search: "hiring web",
+  });
+
   const [posts, setPosts] = useState([]);
 
-  const getPosts = (subreddit, query) => {
+  const getPosts = (subreddit, search) => {
     axios
       .get(
-        `https://www.reddit.com/r/${subreddit}/search.json?q=${query}&restrict_sr=1&sort=new&limit=500`
+        `https://www.reddit.com/r/${subreddit}/search.json?q=${search}&restrict_sr=1&sort=new&limit=100`
       )
       .then((result) => {
         const newPosts = result.data.data.children.map((post) => post.data);
-        console.log(newPosts);
-        setPosts(newPosts);
+        const filteredPosts = newPosts.filter((post) =>
+          /hiring/i.test(post.title)
+        );
+        console.log(filteredPosts);
+        setPosts(filteredPosts);
       });
   };
 
   useEffect(() => {
-    getPosts("forhire", "hiring web");
+    getPosts(query.subreddit, query.search);
   }, []);
 
   return (
