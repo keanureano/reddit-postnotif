@@ -10,7 +10,9 @@ function App() {
   const getPosts = (subreddit, query, restrictSubreddit) => {
     axios
       .get(
-        `https://www.reddit.com/r/${subreddit}/search.json?q=${query}&restrict_sr=${Number(restrictSubreddit)}&sort=new&limit=1000`
+        `https://www.reddit.com/r/${subreddit}/search.json?q=${query}&restrict_sr=${Number(
+          restrictSubreddit
+        )}&sort=new&limit=1000`
       )
       .then((result) => {
         const newPosts = result.data.data.children.map((post) => post.data);
@@ -44,7 +46,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div>
       <form>
         <input type="text" value={subreddit} onChange={subredditHandler} />
         <input type="text" value={query} onChange={queryHandler} />
@@ -55,7 +57,7 @@ function App() {
         />
         <button onClick={submitHandler}>Submit</button>
       </form>
-      <div className="posts">
+      <div>
         {posts.map((post) => (
           <Post key={post.id} post={post} />
         ))}
@@ -81,7 +83,9 @@ function Post({ post }) {
       <h4>r/{post.subreddit}</h4>
       <h5>{date(post.created_utc)}</h5>
       <p>{truncate(post.selftext, 500)}</p>
-      <a href={`https://www.reddit.com${post.permalink}`} target="_blank">link</a>
+      <a href={`https://www.reddit.com${post.permalink}`} target="_blank">
+        link
+      </a>
     </div>
   );
 }
