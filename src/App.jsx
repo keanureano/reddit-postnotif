@@ -45,16 +45,16 @@ function App() {
   }, []);
 
   return (
-    <div className="px-40">
+    <div className="px-10 md:px-40">
       <form className="py-5">
         <input
-          className="mr-5 font-semibold transition duration-75 border-0 rounded-lg shadow-sm bg-slate-700 shadow-slate-500 hover:bg-slate-500"
+          className="mb-2 mr-5 font-semibold transition duration-75 border-0 rounded-lg shadow-sm md:mb-0 bg-slate-700 shadow-slate-500 hover:bg-slate-500"
           type="text"
           value={subreddit}
           onChange={subredditHandler}
         />
         <input
-          className="mr-5 font-semibold transition duration-75 border-0 rounded-lg shadow-sm bg-slate-700 shadow-slate-500 hover:bg-slate-500"
+          className="mb-2 mr-5 font-semibold transition duration-75 border-0 rounded-lg shadow-sm md:mb-0 bg-slate-700 shadow-slate-500 hover:bg-slate-500"
           type="text"
           value={query}
           onChange={queryHandler}
@@ -84,12 +84,14 @@ function Posts({ posts }) {
   if (posts.length == 0) {
     return (
       <div class="grid h-screen place-items-center">
-        <p className="mb-40 text-4xl font-thin text-slate-300">Loading Posts...</p>
+        <p className="mb-40 text-4xl font-thin text-slate-300">
+          Loading Posts...
+        </p>
       </div>
     );
   }
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid gap-4 md:grid-cols-3">
       {posts.map((post) => (
         <Post key={post.id} post={post} />
       ))}
