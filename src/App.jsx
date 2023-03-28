@@ -18,10 +18,8 @@ function App() {
         `https://www.reddit.com/search.json?q=${query}&sort=new&limit=1000`
       );
     }
-    console.log(result);
     const newPosts = result.data.data.children.map((post) => post.data);
     const filteredPosts = newPosts.filter((post) => /hiring/i.test(post.title));
-    console.log(filteredPosts);
     setPosts(filteredPosts);
   };
 
@@ -77,11 +75,24 @@ function App() {
           Submit
         </button>
       </form>
-      <div className="grid grid-cols-3 gap-4">
-        {posts.map((post) => (
-          <Post key={post.id} post={post} />
-        ))}
+      <Posts posts={posts} />
+    </div>
+  );
+}
+
+function Posts({ posts }) {
+  if (posts.length == 0) {
+    return (
+      <div class="grid h-screen place-items-center">
+        <p className="mb-40 text-4xl font-thin text-slate-300">Loading Posts...</p>
       </div>
+    );
+  }
+  return (
+    <div className="grid grid-cols-3 gap-4">
+      {posts.map((post) => (
+        <Post key={post.id} post={post} />
+      ))}
     </div>
   );
 }
