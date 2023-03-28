@@ -62,7 +62,7 @@ function App() {
           onChange={queryHandler}
         />
         <p className="inline-block mr-1 font-semibold text-slate-300">
-          Required
+          Restrict Subreddit
         </p>
         <input
           className="mr-5 rounded bg-slate-700"
