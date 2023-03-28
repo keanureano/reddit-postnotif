@@ -2,17 +2,15 @@ import axios from "axios";
 import moment from "moment";
 import React, { useState, useEffect } from "react";
 function App() {
-  const [query, setQuery] = useState({
-    subreddit: "forhire",
-    search: "hiring web",
-  });
-
+  const [subreddit, setSubreddit] = useState("forhire");
+  const [query, setQuery] = useState("hiring web");
+  const [restrictSubreddit, setRestrictSubreddit] = useState(false);
   const [posts, setPosts] = useState([]);
 
-  const getPosts = (subreddit, search) => {
+  const getPosts = (subreddit, query, restrictSubreddit) => {
     axios
       .get(
-        `https://www.reddit.com/r/${subreddit}/search.json?q=${search}&restrict_sr=1&sort=new&limit=100`
+        `https://www.reddit.com/r/${subreddit}/search.json?q=${query}&restrict_sr=${Number(restrictSubreddit)}&sort=new&limit=1000`
       )
       .then((result) => {
         const newPosts = result.data.data.children.map((post) => post.data);
@@ -24,12 +22,39 @@ function App() {
       });
   };
 
+  const subredditHandler = (e) => {
+    setSubreddit(e.target.value);
+  };
+
+  const queryHandler = (e) => {
+    setQuery(e.target.value);
+  };
+
+  const restrictSubredditHandler = (e) => {
+    setRestrictSubreddit(e.target.checked);
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    getPosts(subreddit, query, restrictSubreddit);
+  };
+
   useEffect(() => {
-    getPosts(query.subreddit, query.search);
+    getPosts(subreddit, query, restrictSubreddit);
   }, []);
 
   return (
     <div className="App">
+      <form>
+        <input type="text" value={subreddit} onChange={subredditHandler} />
+        <input type="text" value={query} onChange={queryHandler} />
+        <input
+          type="checkbox"
+          checked={restrictSubreddit}
+          onChange={restrictSubredditHandler}
+        />
+        <button onClick={submitHandler}>Submit</button>
+      </form>
       <div className="posts">
         {posts.map((post) => (
           <Post key={post.id} post={post} />
@@ -56,7 +81,7 @@ function Post({ post }) {
       <h4>r/{post.subreddit}</h4>
       <h5>{date(post.created_utc)}</h5>
       <p>{truncate(post.selftext, 500)}</p>
-      <a href={`https://www.reddit.com${post.permalink}`}>link</a>
+      <a href={`https://www.reddit.com${post.permalink}`} target="_blank">link</a>
     </div>
   );
 }
